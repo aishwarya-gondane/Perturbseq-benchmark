@@ -1,0 +1,11 @@
+name: psbench
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - nextflow
+  - pip:
+      - -e .[dev]

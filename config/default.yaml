@@ -1,0 +1,97 @@
+seed: 0
+
+# Column names differ between pertpy releases. Run `psbench inspect --dataset <name>`
+# once after downloading and adjust the values below if needed.
+datasets:
+  norman2019:
+    loader: norman_2019
+    perturbation_col: perturbation_name
+    combo_sep: "+"
+    batch_col: gemgroup
+    guide_col: guide_identity
+    var_symbol_col: null
+    max_perturbations: null
+  replogle2022_k562_essential:
+    loader: replogle_2022_k562_essential
+    perturbation_col: gene
+    combo_sep: null
+    batch_col: gem_group
+    guide_col: gene_transcript
+    var_symbol_col: gene_name
+    max_perturbations: 150
+
+preprocess:
+  n_top_genes: 2000
+  min_cells_per_perturbation: 30
+  max_cells_per_perturbation: 300
+  max_control_cells: 3000
+
+guides:
+  n_cells: 5000
+  n_guides: 50
+  moi: [1.0, 2.0, 5.0]
+  signal_mean: [10, 30, 100, 300]
+  ambient_mean: 3.0
+
+effects:
+  fdr: 0.05
+  min_frac_expressed: 0.05
+  mixed_genes: 300
+  mixed_group_col: batch
+  max_perts: null
+  null:
+    n_groups: 10
+    group_size: 100
+
+power:
+  n_cells: [10, 25, 50, 100, 200, 500]
+  lfc: [0.25, 0.5, 1.0]
+  frac_de: 0.1
+  n_control: 1000
+  n_rep: 5
+  downsample_fractions: [0.1, 0.25, 0.5, 0.75]
+
+interaction:
+  min_cells: 20
+  fdr: 0.05
+  synergy_ratio: 1.2
+  buffer_ratio: 0.8
+
+model:
+  folds: 5
+  emb: 32
+  hidden: 128
+  dropout: 0.1
+  epochs: 400
+  lr: 0.001
+  weight_decay: 0.0001
+  patience: 40
+  min_cells: 10
+
+# Overrides applied with --quick, used for smoke tests of the workflow.
+quick:
+  preprocess:
+    n_top_genes: 500
+    min_cells_per_perturbation: 20
+    max_cells_per_perturbation: 60
+    max_control_cells: 500
+  datasets:
+    replogle2022_k562_essential:
+      max_perturbations: 12
+  guides:
+    n_cells: 1000
+    moi: [1.0, 2.0]
+    signal_mean: [30, 300]
+  effects:
+    max_perts: 12
+    mixed_genes: 50
+    null:
+      n_groups: 3
+      group_size: 40
+  power:
+    n_cells: [25, 100]
+    lfc: [0.5, 1.0]
+    n_rep: 2
+  model:
+    folds: 3
+    epochs: 60
